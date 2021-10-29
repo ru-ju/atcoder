@@ -3,6 +3,7 @@ from collections import deque
 from copy import deepcopy, copy
 from heapq import heapify, heappop, heappush
 from bisect import bisect_right, bisect_left
+from functools import partial
 
 INF = float('inf')
 
@@ -36,6 +37,18 @@ def pow_mat_mod(a, n, mod):
         n >>= 1
     return ans
 
+def b_s_func(mini, maxi, func):
+    l = mini
+    r = maxi
+    while(r - l > 1):
+        mid = (l + r) // 2
+        if func(mid):
+            r = mid
+        else:
+            l = mid
+
+    return l if func(l) else r
+
 def func(n,p):
     return (n + 3) * n > 2 * p
 
@@ -53,14 +66,10 @@ def main():
 
     # print(ans)
 
-    l = 0
+    l = 1
     r = n
-    while(r - l > 1):
-        mid = (l + r) // 2
-        if func(mid, n):
-            r = mid
-        else:
-            l = mid
+
+    r = b_s_func(l, r, partial(func, p=n))
 
     ans = n - r + 1
 
